@@ -92,15 +92,15 @@ jobs:
         echo "matching_issues=${matching_issues}" >> "$GITHUB_ENV"
         echo "Done with check-if-issue-exists step"
         if [[ $matching_issues == "[]" ]]; then
-          echo "make_issue=true" >> "$GITHUB_OUTPUT"
+          echo "make_issue=${{ true }}" >> "$GITHUB_OUTPUT"
         else
-          echo "make_issue=false" >> "$GITHUB_OUTPUT"
+          echo "make_issue=${{ false }}" >> "$GITHUB_OUTPUT"
         fi
     
     - name: Create Issue From File
       id: create-issue
       uses: peter-evans/create-issue-from-file@v3
-      if:  {{ steps.check-if-issue-exists.outputs.make_issue }}
+      if:  fromJSON(steps.check-if-issue-exists.outputs.make_issue)
       with:
         title: ${{ env.title }}
         content-filepath: issues/${{ matrix.filename }}
