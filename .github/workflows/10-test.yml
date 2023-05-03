@@ -44,7 +44,7 @@ jobs:
         issue_filenames="[ issues/issue01.md ]"
         issue_filesnames=`cat issue_filenames.tmp`
         echo "issue_filenames=${issue_filenames}" 
-        echo "issue_filenames=${issue_filenames}" >> "$GITHUB_OUTPUT"
+        echo "issue_filenames=[ issues/issue01.md ]" >> "$GITHUB_OUTPUT"
         ls $GITHUB_OUTPUT
         cat $GITHUB_OUTPUT
     - name: Get Open Issues
@@ -65,7 +65,8 @@ jobs:
 
     strategy:
       matrix:
-        filename: ${{ needs.initialize.outputs.issue_filenames }}
+        filename: [ issues/issue01.md ]
+        # filename: ${{ needs.initialize.outputs.issue_filenames }}
 
     steps:
     - name: Checkout repo
