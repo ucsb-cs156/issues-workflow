@@ -100,7 +100,7 @@ jobs:
         #matching_issues=`echo $open_issues | jq "$jq_cmd"`
         matching_issues=`jq "$jq_cmd" open_issues.json`
         echo "matching_issues=${matching_issues}" >> "$GITHUB_ENV"
-        if [ -z "$matching_issues" ]; then
+        if [[ "$matching_issues" == "[]" ]]; then
           echo "No matching issues found"
           echo "issue_not_a_duplicate=${{ true }} >> "$GITHUB_ENV"
         else
@@ -108,7 +108,7 @@ jobs:
           echo "$matching_issues"
           echo "issue_not_a_duplicate=${{ false }} >> "$GITHUB_ENV"
         fi
-        cat $GITHUB_ENV
+        echo "Done with check-if-issue-exists step"
     
     - name: Create Issue From File
       id: create-issue
