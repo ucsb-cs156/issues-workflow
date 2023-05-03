@@ -96,9 +96,9 @@ jobs:
         # else
         #   echo "make_issue=${{ false }}" >> "$GITHUB_OUTPUT"
         # fi
-        
+
         grep_cmd="grep '\"title\":\"${{env.title}}\"'"
-        exists=`gh issue list --state OPEN --json number,title |  $grep_cmd
+        exists=`gh issue list --state OPEN --json number,title |  $grep_cmd`
         echo "exists=${exists}"
         if [[ "$exists" == "" ]]; then
           echo "make_issue=${{ true }}" >> "$GITHUB_OUTPUT"
