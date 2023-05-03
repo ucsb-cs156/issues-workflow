@@ -15,7 +15,7 @@ permissions: write-all
 #   pull-requests: read  
   
 jobs:
-  createIssues:
+  initialize:
     runs-on: ubuntu-latest
     outputs:
       issue_filenames: ${{ steps.get-issue-filenames.issue_filenames }}
@@ -39,6 +39,9 @@ jobs:
         open_issues=`cat open_issues.json`
         echo "open_issues=${open_issues}"
         echo "open_issues=${open_issues}" >> "$GITHUB_OUTPUT"
+  
+ 
+    
     
 #     - name: Create Issue 1 From File
 #       id: step1
