@@ -96,7 +96,7 @@ jobs:
         # else
         #   echo "make_issue=${{ false }}" >> "$GITHUB_OUTPUT"
         # fi
-        echo "make_issue=${{ false }}" >> "$GITHUB_OUTPUT"
+        echo "make_issue=${{ true }}" >> "$GITHUB_OUTPUT"
     
     - name: Create Issue From File
       id: create-issue
