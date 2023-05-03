@@ -15,7 +15,7 @@ permissions: write-all
 #   pull-requests: read  
   
 jobs:
-  initialize:
+  set-things-up:
     runs-on: ubuntu-latest
     outputs:
       issue_filenames: ${{ steps.get-issue-filenames.issue_filenames }}
@@ -35,8 +35,12 @@ jobs:
         ls *.md > ../issue_filenames.tmp
         cd ..
         cat issue_filenames.tmp
-        files=`tr -d "[:space:]" < issue_filenames.tmp`
-        echo "files=${files}" >> "$GITHUB_OUTPUT"
+        files=`tr "[:space:]" " " < issue_filenames.tmp`
+        files=`echo $files | sed 's/ /, /g'`
+        files=`echo ${files%,*}${files##*,}`
+        files="[ ${files} ]"
+        echo "files=${files}"
+        echo "files=$files" >> "$GITHUB_OUTPUT"
 
         # echo "[" > issue_filenames.json
         # while read line; do
@@ -67,12 +71,12 @@ jobs:
   create-issue:
     name: Create issue ${{ matrix.filename }} 
     runs-on: ubuntu-latest
-    needs: [initialize]
+    needs: [set-things-up]
 
     strategy:
       matrix:
         # filename: [ issues/issue01.md ]
-        filename: ${{ needs.initialize.outputs.files }}
+        filename: ${{ needs.set-things-up.outputs.files }}
 
     steps:
     - name: Checkout repo
