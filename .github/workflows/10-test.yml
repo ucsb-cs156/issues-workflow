@@ -28,7 +28,12 @@ jobs:
       run: |
         ls issues/*.md > issue_filenames.tmp
         cat issue_filenames.tmp
-        issue_filenames=`cat issue_filenames.tmp`
+        cat "[" > issue_filenames.json
+        while read line; do
+           echo \"$line\", >> issue_filenames.json
+        done <issue_filenames.tmp
+        cat "]" > issue_filenames.json
+        issue_filenames=`cat issue_filenames.json`
         echo "issue_filenames=${issue_filenames}" 
         echo "issue_filenames=${issue_filenames}" >> "$GITHUB_OUTPUT"
     - name: Get Open Issues
@@ -40,9 +45,6 @@ jobs:
         echo "open_issues=${open_issues}"
         echo "open_issues=${open_issues}" >> "$GITHUB_OUTPUT"
   
- 
-    
-    
 #     - name: Create Issue 1 From File
 #       id: step1
 #       uses: peter-evans/create-issue-from-file@v3
