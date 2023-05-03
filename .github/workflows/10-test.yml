@@ -32,7 +32,7 @@ jobs:
         while read line; do
            echo \"$line\", >> issue_filenames.json
         done <issue_filenames.tmp
-        echo "]" > issue_filenames.json
+        echo "]" >> issue_filenames.json
         issue_filenames=`cat issue_filenames.json`
         echo "issue_filenames=${issue_filenames}" 
         echo "issue_filenames=${issue_filenames}" >> "$GITHUB_OUTPUT"
