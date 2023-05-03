@@ -32,16 +32,17 @@ jobs:
       run: |
         ls issues/*.md > issue_filenames.tmp
         cat issue_filenames.tmp
-        echo "[" > issue_filenames.json
-        while read line; do
-           echo \"$line\", >> issue_filenames.json
-        done <issue_filenames.tmp
-        echo "]" >> issue_filenames.json
-        # Next line removes all whitespace; see: https://www.baeldung.com/linux/remove-whitespace-from-file
-        s=`tr -d "[:space:]" < issue_filenames.json`
-        # Next line removes last trailing comma; see: https://unix.stackexchange.com/a/187920
-        issue_filenames=`echo ${s%,*}${s##*,}`
-        issue_filenames="[\"issues/issue01.md\",\"issues/issue02.md\"]"
+        # echo "[" > issue_filenames.json
+        # while read line; do
+        #    echo \"$line\", >> issue_filenames.json
+        # done <issue_filenames.tmp
+        # echo "]" >> issue_filenames.json
+        # # Next line removes all whitespace; see: https://www.baeldung.com/linux/remove-whitespace-from-file
+        # s=`tr -d "[:space:]" < issue_filenames.json`
+        # # Next line removes last trailing comma; see: https://unix.stackexchange.com/a/187920
+        # issue_filenames=`echo ${s%,*}${s##*,}`
+        # issue_filenames="[\"issues/issue01.md\",\"issues/issue02.md\"]"
+        issue_filesnames=`cat issue_filenames.tmp`
         echo "issue_filenames=${issue_filenames}" 
         echo "issue_filenames=${issue_filenames}" >> "$GITHUB_OUTPUT"
         ls $GITHUB_OUTPUT
@@ -64,7 +65,7 @@ jobs:
 
     strategy:
       matrix:
-        filename: ${{ fromJSON(needs.outputs.issue_filenames) }}
+        filename: ${{ needs.outputs.issue_filenames }}
 
     steps:
     - name: Checkout repo
