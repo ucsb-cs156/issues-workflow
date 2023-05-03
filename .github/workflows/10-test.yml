@@ -98,18 +98,12 @@ jobs:
         #   echo "make_issue=${{ false }}" >> "$GITHUB_OUTPUT"
         # fi
         open_issues=`gh issue list --state OPEN --json number,title`
-        exists=`echo $open_issues | grep "${{ env.title }}"`
-        echo "exists=${exists}"
-        if [[ "$exists" == "" ]]; then
-          echo "make_issue=true" >> "$GITHUB_OUTPUT"
-        else
-          echo "make_issue=false" >> "$GITHUB_OUTPUT"
-        fi
-    
+        echo $open_issues | grep '${{ env.title }}'
+      
     - name: Create Issue From File
       id: create-issue
       uses: peter-evans/create-issue-from-file@v3
-      if:  steps.check-if-issue-exists.outputs.make_issue == 'true'
+      if:  failure() # meaning grep failed to find a duplicate, which is good!
       with:
         title: ${{ env.title }}
         content-filepath: issues/${{ matrix.filename }}
