@@ -28,11 +28,11 @@ jobs:
       run: |
         ls issues/*.md > issue_filenames.tmp
         cat issue_filenames.tmp
-        cat "[" > issue_filenames.json
+        echo "[" > issue_filenames.json
         while read line; do
            echo \"$line\", >> issue_filenames.json
         done <issue_filenames.tmp
-        cat "]" > issue_filenames.json
+        echo "]" > issue_filenames.json
         issue_filenames=`cat issue_filenames.json`
         echo "issue_filenames=${issue_filenames}" 
         echo "issue_filenames=${issue_filenames}" >> "$GITHUB_OUTPUT"
