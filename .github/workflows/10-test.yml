@@ -95,15 +95,18 @@ jobs:
         echo "matching_issues=${matching_issues}" >> "$GITHUB_ENV"
         if [ -z "$matching_issues" ]; then
           echo "No matching issues found"
+          echo "issue_not_a_duplicate=${{ true }} >> "$GITHUB_ENV"
         else
           echo "Matching issues found"
           echo "$matching_issues"
+          echo "issue_not_a_duplicate=${{ false }} >> "$GITHUB_ENV"
         fi
+        cat $GITHUB_ENV
     
     - name: Create Issue From File
       id: create-issue
       uses: peter-evans/create-issue-from-file@v3
-      if: ${{ env.matching_issues }} == []
+      if: ${{ env.issue_not_a_duplicate }}
       with:
         title: ${{ env.title }}
         content-filepath: issues/${{ matrix.filename }}
