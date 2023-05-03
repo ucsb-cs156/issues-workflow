@@ -18,9 +18,9 @@ jobs:
   set-things-up:
     runs-on: ubuntu-latest
     outputs:
-      issue_filenames: ${{ steps.get-issue-filenames.issue_filenames }}
-      open_issues: ${{ steps.get-open-issues.open_issues }}
-      files: ${{ steps.get-issue-filenames.files }}
+      issue_filenames: ${{ steps.get-issue-filenames.outputs.issue_filenames }}
+      open_issues: ${{ steps.get-open-issues.outputs.open_issues }}
+      files: ${{ steps.get-issue-filenames.outputs.files }}
     steps:
     - name: Checkout Repo
       uses: actions/checkout@v3
