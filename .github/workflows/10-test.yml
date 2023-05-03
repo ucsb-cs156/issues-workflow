@@ -51,7 +51,7 @@ jobs:
     - name: Get Open Issues
       id: get-open-issues
       run: |
-        gh issue list --state OPEN --json number,title,state >> open_issues.json
+        gh issue list --state OPEN --json number,title,state > open_issues.json
         echo "open_issues.json contains:..."
         cat open_issues.json
         open_issues=`cat open_issues.json`
