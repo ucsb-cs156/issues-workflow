@@ -17,13 +17,28 @@ permissions: write-all
 jobs:
   createIssues:
     runs-on: ubuntu-latest
+    outputs:
+      issue_filenames: ${{ steps.get-issue-filenames.issue_filenames }}
+      open_issues: ${{ steps.get-open-issues.open_issues }}
     steps:
     - name: Checkout Repo
       uses: actions/checkout@v3
-    - name: List Issues
+    - name: Get Issue Filenames
+      id: get-issue-filenames
       run: |
-        ls issues
-        gh issue list --json number,title,author
+        ls issues/*.md > issue_filenames.tmp
+        cat issue_filenames.tmp
+        issue_filenames=`cat issue_filenames.tmp`
+        echo "issue_filenames=${issue_filenames}" 
+        echo "issue_filenames=${issue_filenames}" >> "$GITHUB_OUTPUT"
+    - name: Get Open Issues
+      id: get-open-issues
+      run: |
+        gh issue list --state OPEN --json number,title,body,state >> open_issues.json
+        cat open_issues.json
+        open_issues =`cat open_issues.json`
+        echo "open_issues=${open_issues}"
+        echo "open_issues=${open_issues}" >> "$GITHUB_OUTPUT"
     
 #     - name: Create Issue 1 From File
 #       id: step1
