@@ -20,6 +20,7 @@ jobs:
     outputs:
       issue_filenames: ${{ steps.get-issue-filenames.issue_filenames }}
       open_issues: ${{ steps.get-open-issues.open_issues }}
+      files: ${{ steps.get-issue-filenames.files }}
     steps:
     - name: Checkout Repo
       uses: actions/checkout@v3
@@ -32,6 +33,9 @@ jobs:
       run: |
         ls issues/*.md > issue_filenames.tmp
         cat issue_filenames.tmp
+        files=`cat issue_filenames.tmp`
+        echo "files=${files}" >> "$GITHUB_OUTPUT"
+
         # echo "[" > issue_filenames.json
         # while read line; do
         #    echo \"$line\", >> issue_filenames.json
@@ -66,7 +70,7 @@ jobs:
     strategy:
       matrix:
         # filename: [ issues/issue01.md ]
-        filename: ${{ needs.initialize.outputs.open_issues }}
+        filename: ${{ needs.initialize.outputs.files }}
 
     steps:
     - name: Checkout repo
