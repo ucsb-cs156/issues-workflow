@@ -55,13 +55,13 @@ jobs:
         echo "open_issues.json contains:..."
         cat open_issues.json
         open_issues=`cat open_issues.json`
-        if [[ "$open_issues" == "[]" ]]; then
-           echo "open_issues=[]"
-           echo "open_issues=[]" >> "$GITHUB_OUTPUT"
-        else
-           echo "open_issues=${open_issues}"
-           echo "open_issues=${open_issues}" >> "$GITHUB_OUTPUT"
-        fi
+        # if [[ "$open_issues" == "[]" ]]; then
+        #    echo "open_issues=[]"
+        #    echo "open_issues=[]" >> "$GITHUB_OUTPUT"
+        # else
+        echo "open_issues=${open_issues}"
+        echo "open_issues=${open_issues}" >> "$GITHUB_OUTPUT"
+        # fi
         echo "GITHUB_OUTPUT contains:..."
         cat $GITHUB_OUTPUT
 
