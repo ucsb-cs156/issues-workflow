@@ -85,6 +85,7 @@ jobs:
 
     - name: Check if issue exists
       id: check-if-issue-exists
+      continue-on-error: true # needed since grep may fail to find a match
       run: |
         # open_issues=${{ toJSON(needs.set-things-up.outputs.open_issues) }}
         # jq_cmd="map(select(.title == \"${{env.title}}\"))"
