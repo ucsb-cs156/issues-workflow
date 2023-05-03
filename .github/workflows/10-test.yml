@@ -42,8 +42,8 @@ jobs:
         # # Next line removes last trailing comma; see: https://unix.stackexchange.com/a/187920
         # issue_filenames=`echo ${s%,*}${s##*,}`
         issue_filenames="[ issues/issue01.md ]"
-        issue_filesnames=`cat issue_filenames.tmp`
-        echo "issue_filenames=${issue_filenames}" 
+        # issue_filenames=`cat issue_filenames.tmp`
+        #echo "issue_filenames=${issue_filenames}" 
         echo "issue_filenames=[ issues/issue01.md ]" >> "$GITHUB_OUTPUT"
         ls $GITHUB_OUTPUT
         cat $GITHUB_OUTPUT
@@ -65,8 +65,8 @@ jobs:
 
     strategy:
       matrix:
-        filename: [ issues/issue01.md ]
-        # filename: ${{ needs.initialize.outputs.issue_filenames }}
+        # filename: [ issues/issue01.md ]
+        filename: ${{ needs.initialize.outputs.issue_filenames }}
 
     steps:
     - name: Checkout repo
