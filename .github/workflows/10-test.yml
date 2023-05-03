@@ -6,6 +6,12 @@ on:
 env:
   GH_TOKEN: ${{ github.token }}
 
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "create-issues"
+  cancel-in-progress: false
+
 permissions: write-all
 
 #   contents: write
@@ -89,9 +95,10 @@ jobs:
     - name: Check if issues exists
       id: check-if-issue-exists
       run: |
-        open_issues=${{ toJSON(needs.set-things-up.outputs.open_issues) }}
+        #open_issues=${{ toJSON(needs.set-things-up.outputs.open_issues) }}
         jq_cmd="map(select(.title == \"${{env.title}}\"))"
-        matching_issues=`echo $open_issues | jq "$jq_cmd"`
+        #matching_issues=`echo $open_issues | jq "$jq_cmd"`
+        matching_issues=`jq "$jq_cmd" open_issues.json`
         echo "matching_issues=${matching_issues}" >> "$GITHUB_ENV"
         if [ -z "$matching_issues" ]; then
           echo "No matching issues found"
