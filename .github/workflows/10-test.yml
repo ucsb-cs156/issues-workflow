@@ -89,7 +89,7 @@ jobs:
     - name: Check if issues exists
       id: check-if-issue-exists
       run: |
-        open_issues={{ needs.set-things-up.outputs.open_issues }}
+        open_issues=${{ needs.set-things-up.outputs.open_issues }}
         matching_issues=`echo $open_issues | jq 'map(select(.title == ${{ env.title }}))'`
         echo "matching_issues=${matching_issues}" >> "$GITHUB_ENV"
         if [ -z "$matching_issues" ]; then
