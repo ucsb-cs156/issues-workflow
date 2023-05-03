@@ -36,7 +36,7 @@ jobs:
       run: |
         gh issue list --state OPEN --json number,title,body,state >> open_issues.json
         cat open_issues.json
-        open_issues =`cat open_issues.json`
+        open_issues=`cat open_issues.json`
         echo "open_issues=${open_issues}"
         echo "open_issues=${open_issues}" >> "$GITHUB_OUTPUT"
     
