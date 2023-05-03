@@ -1,0 +1,27 @@
+
+name: 10-test
+on:
+  workflow_dispatch:
+jobs:
+  createIssues:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v3
+    - name: List Issues
+      run: |
+        ls issues
+    
+#     - name: Create Issue 1 From File
+#       id: step1
+#       uses: peter-evans/create-issue-from-file@v3
+#       with:
+#         title: Set up team deployments for prod and qa on Heroku, including Google OAuth setup
+#         content-filepath: issues/issue00_set_up_deployment_on_heroku.md
+#     - name: Add Issue 1 to Kanban board team03
+#       uses: peter-evans/create-or-update-project-card@v1
+#       with:
+#         project-name: team03
+#         column-name: Todo
+#         issue-number: ${{ steps.step1.outputs.issue-number }}
+
