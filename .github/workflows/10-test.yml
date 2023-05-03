@@ -69,26 +69,27 @@ jobs:
         cat $GITHUB_OUTPUT
 
   create-issue:
-    name: Create issue ${{ matrix.filename }} 
+    name: Create issue  
     runs-on: ubuntu-latest
     needs: [set-things-up]
 
-    strategy:
-      matrix:
-        # filename: [ issues/issue01.md ]
-        filename: ${{ needs.set-things-up.outputs.files }}
+    # strategy:
+    #   matrix:
+    #     # filename: [ issues/issue01.md ]
+    #     filename: ${{ needs.set-things-up.outputs.files }}
 
     steps:
     - name: Checkout repo
       uses: actions/checkout@v3
       with:
         fetch-depth: 1
-    # - name: Loop over issue filenames
-    #   run: |
-    #     for f in ${{ needs.initialize.outputs.issue_filenames }}; do
-    #       title = `cat $f | head -n 1`
+    - name: Loop over issue filenames
+      run: |
+        echo "files=${{ needs.set-things-up.outputs.files }}"
+        # for f in ${{ needs.initialize.outputs.issue_filenames }}; do
+        #   title = `cat $f | head -n 1`
 
-    #     done
+        # done
 
   #   - name: Create Issue From File
   #     id: step1
