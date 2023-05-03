@@ -103,7 +103,7 @@ jobs:
     - name: Create Issue From File
       id: create-issue
       uses: peter-evans/create-issue-from-file@v3
-      if: env.matching_issues != "[]"
+      if: ${{ env.matching_issues }} != "[]"
       with:
         title: ${{ env.title }}
         content-filepath: issues/${{ matrix.filename }}
