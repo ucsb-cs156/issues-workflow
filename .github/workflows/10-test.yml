@@ -2,6 +2,18 @@
 name: 10-test
 on:
   workflow_dispatch:
+  
+env:
+  GH_TOKEN: ${{ github.token }}
+
+permissions: write-all
+
+#   contents: write
+#   pages: write
+#   id-token: write
+#   issues: write
+#   pull-requests: read  
+  
 jobs:
   createIssues:
     runs-on: ubuntu-latest
@@ -11,6 +23,7 @@ jobs:
     - name: List Issues
       run: |
         ls issues
+        gh issue list --json number,title,author
     
 #     - name: Create Issue 1 From File
 #       id: step1
