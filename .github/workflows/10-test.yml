@@ -20,7 +20,6 @@ jobs:
     outputs:
       issue_filenames: ${{ steps.get-issue-filenames.outputs.issue_filenames }}
       open_issues: ${{ steps.get-open-issues.outputs.open_issues }}
-      # files: ${{ steps.get-issue-filenames.outputs.files }}
     steps:
     - name: Checkout Repo
       uses: actions/checkout@v3
@@ -61,8 +60,13 @@ jobs:
         gh issue list --state OPEN --json number,title,body,state >> open_issues.json
         cat open_issues.json
         open_issues=`cat open_issues.json`
-        echo "open_issues=${open_issues}"
-        echo "open_issues=${open_issues}" >> "$GITHUB_OUTPUT"
+        if $open_issues == "[]"; then
+           echo "open_issues=[]"
+           echo "open_issues=[]" >> "$GITHUB_OUTPUT"
+        else
+           echo "open_issues=${open_issues}"
+           echo "open_issues=${open_issues}" >> "$GITHUB_OUTPUT"
+        fi
         ls $GITHUB_OUTPUT
         cat $GITHUB_OUTPUT
 
