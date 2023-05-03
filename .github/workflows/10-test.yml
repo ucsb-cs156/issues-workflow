@@ -31,9 +31,11 @@ jobs:
     - name: Get Issue Filenames
       id: get-issue-filenames
       run: |
-        ls issues/*.md > issue_filenames.tmp
+        cd issues
+        ls *.md > ../issue_filenames.tmp
+        cd ..
         cat issue_filenames.tmp
-        files=`cat issue_filenames.tmp`
+        files=`tr -d "[:space:]" < issue_filenames.tmp`
         echo "files=${files}" >> "$GITHUB_OUTPUT"
 
         # echo "[" > issue_filenames.json
