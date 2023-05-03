@@ -33,7 +33,8 @@ jobs:
            echo \"$line\", >> issue_filenames.json
         done <issue_filenames.tmp
         echo "]" >> issue_filenames.json
-        issue_filenames=`cat issue_filenames.json`
+        # Next line removes all whitespace, see: https://www.baeldung.com/linux/remove-whitespace-from-file
+        issue_filenames=`tr -d "[:space:]" < issue_filenames.json`
         echo "issue_filenames=${issue_filenames}" 
         echo "issue_filenames=${issue_filenames}" >> "$GITHUB_OUTPUT"
     - name: Get Open Issues
