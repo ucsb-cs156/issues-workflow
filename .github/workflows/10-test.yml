@@ -67,7 +67,7 @@ jobs:
         cat $GITHUB_OUTPUT
 
   create-issue:
-    name: Create issue for ${{ matrix.filename }}}
+    name: Create issue from ${{ matrix.filename }}
     runs-on: ubuntu-latest
     needs: [set-things-up]
 
@@ -87,14 +87,27 @@ jobs:
         title=`cat issues/${{ matrix.filename }} | head -n 1`
         echo "title=${title}" >> "$GITHUB_ENV"
 
+    - name: Check if issues exists
+      id: check-if-issue-exists
+      run: |
+        open_issues={{ needs.set-things-up.outputs.open_issues }}
+        matching_issues=`echo $open_issues | jq 'map(select(.title == ${{ env.title }}))'`
+        echo "matching_issues=${matching_issues}" >> "$GITHUB_ENV"
+        if [ -z "$matching_issues" ]; then
+          echo "No matching issues found"
+        else
+          echo "Matching issues found"
+          echo "$matching_issues"
+        fi
+    
     - name: Create Issue From File
-      id: step1
+      id: create-issue
       uses: peter-evans/create-issue-from-file@v3
+      if: env.matching_issues != "[]"
       with:
         title: ${{ env.title }}
         content-filepath: issues/${{ matrix.filename }}
         label: "auto"
-
 
   # create-issue:
   #   name: Create issues
