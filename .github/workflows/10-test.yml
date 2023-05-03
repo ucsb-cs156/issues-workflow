@@ -43,6 +43,7 @@ jobs:
         issue_filenames=`echo ${s%,*}${s##*,}`
         echo "issue_filenames=${issue_filenames}" 
         echo "issue_filenames=${issue_filenames}" >> "$GITHUB_OUTPUT"
+        ls $GITHUB_OUTPUT
     - name: Get Open Issues
       id: get-open-issues
       run: |
@@ -51,7 +52,8 @@ jobs:
         open_issues=`cat open_issues.json`
         echo "open_issues=${open_issues}"
         echo "open_issues=${open_issues}" >> "$GITHUB_OUTPUT"
-  
+        ls $GITHUB_OUTPUT
+        
   create-issue:
     name: Create issue ${{ matrix.filename }}
     runs-on: ubuntu-latest
