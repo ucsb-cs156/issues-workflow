@@ -92,13 +92,12 @@ jobs:
         title=`cat issues/${{ matrix.filename }} | head -n 1`
         echo "title=${title}" >> "$GITHUB_ENV"
 
-    - name: Check if issues exists
+    - name: Check if issue exists
       id: check-if-issue-exists
       run: |
-        #open_issues=${{ toJSON(needs.set-things-up.outputs.open_issues) }}
+        open_issues=${{ toJSON(needs.set-things-up.outputs.open_issues) }}
         jq_cmd="map(select(.title == \"${{env.title}}\"))"
-        #matching_issues=`echo $open_issues | jq "$jq_cmd"`
-        matching_issues=`jq "$jq_cmd" open_issues.json`
+        matching_issues=`echo $open_issues | jq "$jq_cmd"`
         echo "matching_issues=${matching_issues}" >> "$GITHUB_ENV"
         if [[ "$matching_issues" == "[]" ]]; then
           echo "No matching issues found"
