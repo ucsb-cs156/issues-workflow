@@ -99,20 +99,12 @@ jobs:
         jq_cmd="map(select(.title == \"${{env.title}}\"))"
         matching_issues=`echo $open_issues | jq "$jq_cmd"`
         echo "matching_issues=${matching_issues}" >> "$GITHUB_ENV"
-        if [[ "$matching_issues" == "[]" ]]; then
-          echo "No matching issues found"
-          echo "issue_not_a_duplicate=${{ true }} >> "$GITHUB_ENV"
-        else
-          echo "Matching issues found"
-          echo "$matching_issues"
-          echo "issue_not_a_duplicate=${{ false }} >> "$GITHUB_ENV"
-        fi
         echo "Done with check-if-issue-exists step"
     
     - name: Create Issue From File
       id: create-issue
       uses: peter-evans/create-issue-from-file@v3
-      if: ${{ env.issue_not_a_duplicate }}
+      if: ${{ env.matching_issues == "[]" }}
       with:
         title: ${{ env.title }}
         content-filepath: issues/${{ matrix.filename }}
