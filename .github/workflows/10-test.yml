@@ -23,6 +23,10 @@ jobs:
     steps:
     - name: Checkout Repo
       uses: actions/checkout@v3
+    - name: Create Label 
+      run: |
+        gh label create "auto" -f -d "This issue was created from a script" -c 909090
+
     - name: Get Issue Filenames
       id: get-issue-filenames
       run: |
@@ -48,6 +52,34 @@ jobs:
         echo "open_issues=${open_issues}"
         echo "open_issues=${open_issues}" >> "$GITHUB_OUTPUT"
   
+  create-issue:
+    name: Create issue ${{ matrix.filename }}
+    runs-on: ubuntu-latest
+    if: ${{ needs.initialize.outputs.issue_filenames != '[]' && needs.initialize.outputs.issue_filenames != '' }}
+    needs: [initialize]
+
+    strategy:
+      matrix:
+        filename: ${{ fromJSON(needs.outputs.issue_filenames)}}
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 1
+    - name: Get title
+      run: |
+        title=`cat ${{ matrix.filename }} | head -n 1`
+    - name: Create Issue From File
+      id: step1
+      uses: peter-evans/create-issue-from-file@v3
+      with:
+        title: ${title}
+        content-filepath: ${{ matrix.filename }}
+        label: "auto"
+
+
+
 #     - name: Create Issue 1 From File
 #       id: step1
 #       uses: peter-evans/create-issue-from-file@v3
