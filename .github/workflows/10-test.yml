@@ -90,7 +90,8 @@ jobs:
       id: check-if-issue-exists
       run: |
         open_issues=${{ needs.set-things-up.outputs.open_issues }}
-        matching_issues=`echo $open_issues | jq 'map(select(.title == ${{ env.title }}))'`
+        jq_cmd="map(select(.title == \"${{env.title}}\"))"
+        matching_issues=`echo $open_issues | jq "$jq_cmd"
         echo "matching_issues=${matching_issues}" >> "$GITHUB_ENV"
         if [ -z "$matching_issues" ]; then
           echo "No matching issues found"
