@@ -64,7 +64,7 @@ jobs:
 
     strategy:
       matrix:
-        filename: ${{ fromJSON(needs.outputs.issue_filenames)}}
+        filename: ${{ needs.outputs.issue_filenames }}
 
     steps:
     - name: Checkout repo
