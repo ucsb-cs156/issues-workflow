@@ -20,7 +20,7 @@ jobs:
     outputs:
       issue_filenames: ${{ steps.get-issue-filenames.outputs.issue_filenames }}
       open_issues: ${{ steps.get-open-issues.outputs.open_issues }}
-      files: ${{ steps.get-issue-filenames.outputs.files }}
+      # files: ${{ steps.get-issue-filenames.outputs.files }}
     steps:
     - name: Checkout Repo
       uses: actions/checkout@v3
@@ -35,26 +35,24 @@ jobs:
         ls *.md > ../issue_filenames.tmp
         cd ..
         cat issue_filenames.tmp
-        files=`tr "[:space:]" " " < issue_filenames.tmp`
-        files=`echo $files | sed 's/ /, /g'`
-        files=`echo ${files%,*}${files##*,}`
-        files="[ ${files} ]"
-        echo "files=${files}"
-        echo "files=$files" >> "$GITHUB_OUTPUT"
+        # files=`tr "[:space:]" " " < issue_filenames.tmp`
+        # files=`echo $files | sed 's/ /, /g'`
+        # files=`echo ${files%,*}${files##*,}`
+        # files="[ ${files} ]"
+        # echo "files=${files}"
+        # echo "files=$files" >> "$GITHUB_OUTPUT"
 
-        # echo "[" > issue_filenames.json
-        # while read line; do
-        #    echo \"$line\", >> issue_filenames.json
-        # done <issue_filenames.tmp
-        # echo "]" >> issue_filenames.json
-        # # Next line removes all whitespace; see: https://www.baeldung.com/linux/remove-whitespace-from-file
-        # s=`tr -d "[:space:]" < issue_filenames.json`
-        # # Next line removes last trailing comma; see: https://unix.stackexchange.com/a/187920
-        # issue_filenames=`echo ${s%,*}${s##*,}`
-        issue_filenames="[ issues/issue01.md ]"
-        # issue_filenames=`cat issue_filenames.tmp`
-        #echo "issue_filenames=${issue_filenames}" 
-        echo "issue_filenames=[ issues/issue01.md ]" >> "$GITHUB_OUTPUT"
+        echo "[" > issue_filenames.json
+        while read line; do
+           echo \"$line\", >> issue_filenames.json
+        done <issue_filenames.tmp
+        echo "]" >> issue_filenames.json
+        # Next line removes all whitespace; see: https://www.baeldung.com/linux/remove-whitespace-from-file
+        s=`tr -d "[:space:]" < issue_filenames.json`
+        # Next line removes last trailing comma; see: https://unix.stackexchange.com/a/187920
+        issue_filenames=`echo ${s%,*}${s##*,}`
+        echo "issue_filenames=${issue_filenames}" 
+        echo "issue_filenames=${issue_filenames}" >> "$GITHUB_OUTPUT"
         ls $GITHUB_OUTPUT
         cat $GITHUB_OUTPUT
     - name: Get Open Issues
@@ -76,7 +74,7 @@ jobs:
     strategy:
       matrix:
         # filename: [ issues/issue01.md ]
-        filename: ${{ needs.set-things-up.outputs.files }}
+        filename: ${{ fromJSON(needs.set-things-up.outputs.issue_filenames) }}
 
     steps:
     - name: Checkout repo
@@ -88,7 +86,7 @@ jobs:
       run: |
         title=`cat issues/${{ matrix.filename }} | head -n 1`
         echo "title=${title}"
-        
+
     - name: Create Issue From File
       id: step1
       uses: peter-evans/create-issue-from-file@v3
