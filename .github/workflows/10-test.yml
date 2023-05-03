@@ -36,7 +36,7 @@ jobs:
         # Next line removes all whitespace; see: https://www.baeldung.com/linux/remove-whitespace-from-file
         s=`tr -d "[:space:]" < issue_filenames.json`
         # Next line removes last trailing comma; see: https://unix.stackexchange.com/a/187920
-        issue_filenames=`echo ${s%,*} ${s##*,}`
+        issue_filenames=`echo ${s%,*}${s##*,}`
         echo "issue_filenames=${issue_filenames}" 
         echo "issue_filenames=${issue_filenames}" >> "$GITHUB_OUTPUT"
     - name: Get Open Issues
