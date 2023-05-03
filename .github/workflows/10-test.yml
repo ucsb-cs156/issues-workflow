@@ -63,7 +63,7 @@ jobs:
     #     echo "open_issues=${open_issues}" >> "$GITHUB_OUTPUT"
 
   create-issue:
-    name: Create issue from ${{ matrix.filename }}
+    name: Convert ${{ matrix.filename }} to issue
     runs-on: ubuntu-latest
     needs: [set-things-up]
 
