@@ -60,7 +60,6 @@ jobs:
   create-issue:
     name: Create issue ${{ matrix.filename }}
     runs-on: ubuntu-latest
-    if: ${{ needs.initialize.outputs.issue_filenames != '[]' && needs.initialize.outputs.issue_filenames != '' }}
     needs: [initialize]
 
     strategy:
