@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       issue_filenames: ${{ steps.get-issue-filenames.outputs.issue_filenames }}
-      open_issues: ${{ steps.get-open-issues.outputs.open_issues }}
+      # open_issues: ${{ steps.get-open-issues.outputs.open_issues }}
     steps:
     - name: Checkout Repo
       uses: actions/checkout@v3
@@ -52,15 +52,15 @@ jobs:
         issue_filenames=`echo ${s%,*}${s##*,}`
         echo "issue_filenames=${issue_filenames}" 
         echo "issue_filenames=${issue_filenames}" >> "$GITHUB_OUTPUT"
-    - name: Get Open Issues
-      id: get-open-issues
-      run: |
-        gh issue list --state OPEN --json number,title,state > open_issues.json
-        echo "open_issues.json contains:..."
-        cat open_issues.json
-        open_issues=`cat open_issues.json`
-        echo "open_issues=${open_issues}"
-        echo "open_issues=${open_issues}" >> "$GITHUB_OUTPUT"
+    # - name: Get Open Issues
+    #   id: get-open-issues
+    #   run: |
+    #     gh issue list --state OPEN --json number,title,state > open_issues.json
+    #     echo "open_issues.json contains:..."
+    #     cat open_issues.json
+    #     open_issues=`cat open_issues.json`
+    #     echo "open_issues=${open_issues}"
+    #     echo "open_issues=${open_issues}" >> "$GITHUB_OUTPUT"
 
   create-issue:
     name: Create issue from ${{ matrix.filename }}
@@ -96,7 +96,15 @@ jobs:
         # else
         #   echo "make_issue=${{ false }}" >> "$GITHUB_OUTPUT"
         # fi
-        echo "make_issue=${{ true }}" >> "$GITHUB_OUTPUT"
+        
+        grep_cmd="grep '\"title\":\"${{env.title}}\"'"
+        exists=`gh issue list --state OPEN --json number,title |  $grep_cmd
+        echo "exists=${exists}"
+        if [[ "$exists" == "" ]]; then
+          echo "make_issue=${{ true }}" >> "$GITHUB_OUTPUT"
+        else
+          echo "make_issue=${{ false }}" >> "$GITHUB_OUTPUT"
+        fi
     
     - name: Create Issue From File
       id: create-issue
