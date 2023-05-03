@@ -86,16 +86,17 @@ jobs:
     - name: Check if issue exists
       id: check-if-issue-exists
       run: |
-        open_issues=${{ toJSON(needs.set-things-up.outputs.open_issues) }}
-        jq_cmd="map(select(.title == \"${{env.title}}\"))"
-        matching_issues=`echo $open_issues | jq "$jq_cmd"`
-        echo "matching_issues=${matching_issues}" >> "$GITHUB_ENV"
-        echo "Done with check-if-issue-exists step"
-        if [[ "$matching_issues" == "[]" ]]; then
-          echo "make_issue=${{ true }}" >> "$GITHUB_OUTPUT"
-        else
-          echo "make_issue=${{ false }}" >> "$GITHUB_OUTPUT"
-        fi
+        # open_issues=${{ toJSON(needs.set-things-up.outputs.open_issues) }}
+        # jq_cmd="map(select(.title == \"${{env.title}}\"))"
+        # matching_issues=`echo $open_issues | jq "$jq_cmd"`
+        # echo "matching_issues=${matching_issues}" >> "$GITHUB_ENV"
+        # echo "Done with check-if-issue-exists step"
+        # if [[ "$matching_issues" == "[]" ]]; then
+        #   echo "make_issue=${{ true }}" >> "$GITHUB_OUTPUT"
+        # else
+        #   echo "make_issue=${{ false }}" >> "$GITHUB_OUTPUT"
+        # fi
+        echo "make_issue=${{ false }}" >> "$GITHUB_OUTPUT"
     
     - name: Create Issue From File
       id: create-issue
