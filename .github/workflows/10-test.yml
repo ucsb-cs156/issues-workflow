@@ -41,7 +41,7 @@ jobs:
         s=`tr -d "[:space:]" < issue_filenames.json`
         # Next line removes last trailing comma; see: https://unix.stackexchange.com/a/187920
         issue_filenames=`echo ${s%,*}${s##*,}`
-        issue_filenames='["issues/issue01.md","issues/issue02.md"]'
+        issue_filenames=["issues/issue01.md","issues/issue02.md"]
         echo "issue_filenames=${issue_filenames}" 
         echo "issue_filenames=${issue_filenames}" >> "$GITHUB_OUTPUT"
         ls $GITHUB_OUTPUT
@@ -64,7 +64,7 @@ jobs:
 
     strategy:
       matrix:
-        filename: ${{ needs.outputs.issue_filenames }}
+        filename: ${{ fromJSON(needs.outputs.issue_filenames) }}
 
     steps:
     - name: Checkout repo
