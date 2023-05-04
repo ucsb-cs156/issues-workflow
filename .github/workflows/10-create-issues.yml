@@ -1,5 +1,6 @@
+# Create issues from files in the issues/ directory
 
-name: 10-test
+name: 10-create-issues
 on:
   workflow_dispatch:
   

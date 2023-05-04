@@ -1,0 +1,44 @@
+
+name: 20-create-project-board
+on:
+  workflow_dispatch:
+    inputs:
+      team:
+        type: choice
+        description: team to create project board for
+        options: 
+        - s23-5pm-1
+        - s23-5pm-2
+        - s23-5pm-3
+        - s23-5pm-4
+        - s23-6pm-1
+        - s23-6pm-2
+        - s23-6pm-3
+        - s23-6pm-4
+        - s23-7pm-1
+        - s23-7pm-2
+        - s23-7pm-3
+        - s23-7pm-4
+      
+  
+env:
+  GH_TOKEN: ${{ github.token }}
+
+permissions: write-all
+   # see: https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#permissions
+  #  contents: read
+  #  issues: write
+
+jobs:
+  set-things-up:
+    runs-on: ubuntu-latest
+    outputs:
+      issue_filenames: ${{ steps.get-issue-filenames.outputs.issue_filenames }}
+    steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v3
+    - name: Debugging output
+      run: |
+        echo "team=${{ github.event.inputs.team }} 
+        
+    
