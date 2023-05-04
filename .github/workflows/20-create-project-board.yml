@@ -69,7 +69,7 @@ jobs:
             createProjectV2(
               input: {
                 ownerId: ${{ env.org_id }},
-                title: ${{ github.event.inputs.project}}-${{ github.event.inputs.team }}
+                title: "${{ github.event.inputs.project}}-${{ github.event.inputs.team }}"
               }
             ){
               projectV2 {
