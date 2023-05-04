@@ -78,10 +78,11 @@ jobs:
       
     - name: Create Issue From File
       id: create-issue
-      uses: peter-evans/create-issue-from-file@v3
+      uses: peter-evans/create-issue-from-file@v4.0.1
       if: steps.check-if-issue-exists.outcome == 'failure' # meaning grep failed to find a duplicate, which is good!
       with:
         title: ${{ env.title }}
         content-filepath: issues/${{ matrix.filename }}
-        label: "auto"
+        labels: |
+          auto
 
