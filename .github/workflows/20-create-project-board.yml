@@ -3,6 +3,13 @@ name: 20-create-project-board
 on:
   workflow_dispatch:
     inputs:
+      project:
+        type: choice
+        description: project board to create 
+        options: 
+        - team02
+        - team03
+        - team04
       org:
         type: choice
         description: organization in which to create project board
@@ -54,6 +61,24 @@ jobs:
         org_id=`gh api  -H "Accept: application/vnd.github+json" \
                 -H "X-GitHub-Api-Version: 2022-11-28" \
                 https://api.github.com/orgs/${{ github.event.inputs.org }} | jq .id `
-        echo "org_id=${org_id}"
+        echo "org_id=${org_id}" >> "$GITHUB_ENV"
+    - name: Create project
+      run: |
+        gh api graphql -f query='
+          mutation{
+            createProjectV2(
+              input: {
+                ownerId: ${{ env.org_id }},
+                title: ${{ github.event.inputs.project}}-${{ github.event.inputs.team }}
+              }
+            ){
+              projectV2 {
+                id
+              }
+            }
+          }'
+
+        
+        
         
     
