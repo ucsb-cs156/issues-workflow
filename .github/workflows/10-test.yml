@@ -13,19 +13,14 @@ concurrency:
   cancel-in-progress: false
 
 permissions: write-all
-
-#   contents: write
-#   pages: write
-#   id-token: write
-#   issues: write
-#   pull-requests: read  
+   contents: read
+   issues: write
   
 jobs:
   set-things-up:
     runs-on: ubuntu-latest
     outputs:
       issue_filenames: ${{ steps.get-issue-filenames.outputs.issue_filenames }}
-      # open_issues: ${{ steps.get-open-issues.outputs.open_issues }}
     steps:
     - name: Checkout Repo
       uses: actions/checkout@v3
@@ -52,16 +47,7 @@ jobs:
         issue_filenames=`echo ${s%,*}${s##*,}`
         echo "issue_filenames=${issue_filenames}" 
         echo "issue_filenames=${issue_filenames}" >> "$GITHUB_OUTPUT"
-    # - name: Get Open Issues
-    #   id: get-open-issues
-    #   run: |
-    #     gh issue list --state OPEN --json number,title,state > open_issues.json
-    #     echo "open_issues.json contains:..."
-    #     cat open_issues.json
-    #     open_issues=`cat open_issues.json`
-    #     echo "open_issues=${open_issues}"
-    #     echo "open_issues=${open_issues}" >> "$GITHUB_OUTPUT"
-
+   
   create-issue:
     name: Convert ${{ matrix.filename }} to issue
     runs-on: ubuntu-latest
@@ -87,16 +73,6 @@ jobs:
       id: check-if-issue-exists
       continue-on-error: true # needed since grep may fail to find a match
       run: |
-        # open_issues=${{ toJSON(needs.set-things-up.outputs.open_issues) }}
-        # jq_cmd="map(select(.title == \"${{env.title}}\"))"
-        # matching_issues=`echo $open_issues | jq "$jq_cmd"`
-        # echo "matching_issues=${matching_issues}" >> "$GITHUB_ENV"
-        # echo "Done with check-if-issue-exists step"
-        # if [[ "$matching_issues" == "[]" ]]; then
-        #   echo "make_issue=${{ true }}" >> "$GITHUB_OUTPUT"
-        # else
-        #   echo "make_issue=${{ false }}" >> "$GITHUB_OUTPUT"
-        # fi
         open_issues=`gh issue list --state OPEN --json number,title`
         echo $open_issues | grep '${{ env.title }}'
       
@@ -108,44 +84,4 @@ jobs:
         title: ${{ env.title }}
         content-filepath: issues/${{ matrix.filename }}
         label: "auto"
-
-  # create-issue:
-  #   name: Create issues
-  #   runs-on: ubuntu-latest
-  #   needs: [initialize]
-
-  #   steps:
-  #   - name: Checkout repo
-  #     uses: actions/checkout@v3
-  #     with:
-  #       fetch-depth: 1
-  #   - name: Loop over issue filenames
-  #     run: |
-  #       for f in ${{ needs.initialize.outputs.issue_filenames }}; do
-  #         title = `cat $f | head -n 1`
-
-  #       done
-
-  #   - name: Create Issue From File
-  #     id: step1
-  #     uses: peter-evans/create-issue-from-file@v3
-  #     with:
-  #       title: ${title}
-  #       content-filepath: ${{ matrix.filename }}
-  #       label: "auto"
-
-
-
-#     - name: Create Issue 1 From File
-#       id: step1
-#       uses: peter-evans/create-issue-from-file@v3
-#       with:
-#         title: Set up team deployments for prod and qa on Heroku, including Google OAuth setup
-#         content-filepath: issues/issue00_set_up_deployment_on_heroku.md
-#     - name: Add Issue 1 to Kanban board team03
-#       uses: peter-evans/create-or-update-project-card@v1
-#       with:
-#         project-name: team03
-#         column-name: Todo
-#         issue-number: ${{ steps.step1.outputs.issue-number }}
 
